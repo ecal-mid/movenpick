@@ -44,7 +44,7 @@ def run():
     cv2.namedWindow("test")
 
     channel = grpc.insecure_channel('localhost:50051')
-    #stub = im2txt_pb2_grpc.Im2TxtStub(channel)
+    stub = Im2TxtStub(channel)
 
     tmp_jpg_filename = 'img'
     tmp_mp3_filename = '_mp3_tmp.wav'
@@ -67,8 +67,15 @@ def run():
                 fn = 'temp_' + st + '.jpg'
                 cv2.imwrite(fn, frame)
 
+                imageTo = None
                 with open(fn, 'r') as f:
                     imageTo = f.read()
+
+                response = stub.Run(Im2TxtRequest(image=imageTo))
+                print('response received')
+                print(response.text)
+
+                # do something with the response
 
                 # create stub etc ...
 
