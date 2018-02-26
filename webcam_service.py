@@ -4,8 +4,8 @@ import serial
 import grpc
 import threading
 
-#from im2txt.im2txt import im2txt_pb2
-#from im2txt.im2txt import im2txt_pb2_grpc
+from im2text_pb2 import *
+from im2text_pb2_grpc import *
 
 import cv2
 from gtts import gTTS
@@ -58,8 +58,22 @@ def run():
                 break
 
             k = cv2.waitKey(1)
-            #todo - send image to docker
+            if 's' == chr(k & 255):
+                print("send image to docker")
 
+                ts = time.time()
+                st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d_%H:%M:%S')
+
+                fn = 'temp_' + st + '.jpg'
+                cv2.imwrite(fn, frame)
+
+                with open(fn, 'r') as f:
+                    imageTo = f.read()
+
+                # create stub etc ...
+
+            #todo - send image to docker
+            #print("Send image to docker")
 #            if ser.inWaiting() > 0:
 #                line = ser.read(ser.inWaiting()).decode('ascii')
 #

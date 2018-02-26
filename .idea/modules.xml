@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../grpc/.idea/grpc.iml" filepath="$PROJECT_DIR$/../grpc/.idea/grpc.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/movenpick.iml" filepath="$PROJECT_DIR$/.idea/movenpick.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../talkingcamera/.idea/talkingcamera.iml" filepath="$PROJECT_DIR$/../talkingcamera/.idea/talkingcamera.iml" />
     </modules>
   </component>
 </project>

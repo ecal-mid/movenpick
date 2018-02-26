@@ -1,2 +1,4 @@
 pyserial
 gtts
+grpcio
+grpcio-tools
