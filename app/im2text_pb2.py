@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='im2text.proto',
   package='',
   syntax='proto3',
-  serialized_pb=_b('\n\rim2text.proto\"\x1e\n\rIm2TxtRequest\x12\r\n\x05image\x18\x01 \x01(\x0c\"\x1b\n\x0bIm2TxtReply\x12\x0c\n\x04text\x18\x01 \x01(\t2/\n\x06Im2Txt\x12%\n\x03Run\x12\x0e.Im2TxtRequest\x1a\x0c.Im2TxtReply\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\rim2text.proto\"\x1d\n\rIm2TxtRequest\x12\x0c\n\x04text\x18\x01 \x01(\t\"\x1b\n\x0bIm2TxtReply\x12\x0c\n\x04text\x18\x01 \x01(\t2/\n\x06Im2Txt\x12%\n\x03Run\x12\x0e.Im2TxtRequest\x1a\x0c.Im2TxtReply\"\x00\x62\x06proto3')
 )
 
 
@@ -33,9 +33,9 @@ _IM2TXTREQUEST = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='image', full_name='Im2TxtRequest.image', index=0,
-      number=1, type=12, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b(""),
+      name='text', full_name='Im2TxtRequest.text', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
@@ -52,7 +52,7 @@ _IM2TXTREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=17,
-  serialized_end=47,
+  serialized_end=46,
 )
 
 
@@ -82,8 +82,8 @@ _IM2TXTREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=49,
-  serialized_end=76,
+  serialized_start=48,
+  serialized_end=75,
 )
 
 DESCRIPTOR.message_types_by_name['Im2TxtRequest'] = _IM2TXTREQUEST
@@ -112,8 +112,8 @@ _IM2TXT = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   options=None,
-  serialized_start=78,
-  serialized_end=125,
+  serialized_start=77,
+  serialized_end=124,
   methods=[
   _descriptor.MethodDescriptor(
     name='Run',

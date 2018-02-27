@@ -8,7 +8,8 @@ service Im2Txt {
 
 // The request message containing the user's name.
 message Im2TxtRequest {
-  bytes image = 1;
+  //bytes image = 1;
+  string text = 1; // Just send the path instead
 }
 
 // The response message containing the greetings

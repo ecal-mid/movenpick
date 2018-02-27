@@ -62,18 +62,23 @@ def run():
                 print("send image to docker")
 
                 ts = time.time()
-                st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d_%H:%M:%S')
+                st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d')
 
                 fn = 'temp_' + st + '.jpg'
-                cv2.imwrite(fn, frame)
+                frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                cv2.imwrite(fn, frame_rgb)
 
-                imageTo = None
-                with open(fn, 'r') as f:
-                    imageTo = f.read()
+                #imageTo = None
+                #with open(fn, 'r') as f:
+                #    imageTo = f.read()
 
-                response = stub.Run(Im2TxtRequest(image=imageTo))
+                response = stub.Run(Im2TxtRequest(text=fn))
+
                 print('response received')
                 print(response.text)
+
+                # todo - send images as fast as possible
+                # todo - find a way not to overload images
 
                 # do something with the response
 
