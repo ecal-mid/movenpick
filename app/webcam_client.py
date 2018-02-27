@@ -1,5 +1,5 @@
 from __future__ import print_function
-
+from shutil import copyfile
 import serial
 import grpc
 import threading
@@ -48,27 +48,34 @@ def serial_ports():
                 portArduino = port
         except (OSError, serial.SerialException):
             pass
+        print(portArduino)
         return portArduino
 
 
 current_emotion = "unknown"
 previous_emotion = "unknown"
 
-# todo
-# ser = serial.Serial(serial_ports())
+ser = serial.Serial(serial_ports())
 
-# todo
-# get the current emotion
-# if the current emotion is the one selected then take a picture
+current_arduino_emotion = 'sad'
+dict_arduino_emotion = {2: 'angry', 3: 'sad', 4: 'happy'}
 
+
+def get_arduino_emotion(n):
+    try:
+        return dict_arduino_emotion[n]
+    except Exception:
+        return 'error'
 
 def run():
     global future_emotion
     global current_emotion
     global previous_emotion
+    global current_arduino_emotion
 
     running = 1
     cam = cv2.VideoCapture(0)
+
     cv2.namedWindow("test")
 
     channel = grpc.insecure_channel('localhost:50051')
@@ -80,28 +87,39 @@ def run():
             frame = imutils.resize(frame, width=500)
             cv2.imshow("test", frame)
 
+            if ser.inWaiting() > 0:
+                try:
+                    line = ser.read(ser.inWaiting()).decode('ascii')
+                    print(line, end='')
+                    current_arduino_emotion = get_arduino_emotion(int(line))
+                    print('current emotion {}'.format(current_arduino_emotion))
+                except Exception:
+                    current_emotion = 'error'
+
             if not ret:
                 break
 
             k = cv2.waitKey(1)
 
             if future_emotion is None or future_emotion.done():
-                ts = time.time()
-                st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d')
 
-                fn = 'temp_' + st + '.jpg'
-                frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                cv2.imwrite(fn, frame_rgb)
 
                 if future_emotion is not None:
                     current_emotion = future_emotion.result().text
                     print(current_emotion)
-                    #print('{}\r'.format(current_emotion), end="\r")
-                    if previous_emotion != current_emotion:
-                        print('Emotion has changed')
-                        #todo - if emotion the same as arduino emotion send emotion to ipad
+                    if previous_emotion != current_emotion and current_emotion != 'unknown':
+                        if current_emotion == current_arduino_emotion:
+                            print('img saved')
+                            ts = time.time()
+                            st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d_%H-%M-%S')
+                            new_fn = current_emotion + '_' + st + '.jpg'
+                            copyfile(fn, 'ipad_server/' + new_fn)
 
                     previous_emotion = current_emotion
+
+                fn = 'temp_analysis.jpg'
+                #frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                cv2.imwrite(fn, frame)
                 future_emotion = pool.submit(get_emotion, fn, stub)
 
         except KeyboardInterrupt:
