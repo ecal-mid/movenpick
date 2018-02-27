@@ -25,18 +25,11 @@ _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 class Im2Text(im2text_pb2_grpc.Im2TxtServicer):
 
     def Run(self, request, context):
-        fn = 'eye_lean.jpg'
         fn = request.text
 
-        print('1')
-        #with open(fn, 'wb') as file:
-        #    print('2')
-        #    file.write(request.image)
-
-        print('3')
-        res = 'ERROR'
+        res = 'unknown'
         try:
-            res = predict([fn])
+            res = predict([fn])[0]
         except Exception as e:
             print(e)
 
@@ -132,8 +125,8 @@ def predict(image_paths):
         .map(get_emotions) \
         .value
 
-    print("Prediction time {}".format(elapsed_time))
     elapsed_time = time.process_time() - t
+    print("Prediction time {}".format(elapsed_time))
 
     return result
 
