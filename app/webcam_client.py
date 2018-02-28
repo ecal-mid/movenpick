@@ -77,6 +77,8 @@ def run():
 
     running = 1
     cam = cv2.VideoCapture(0)
+    cam.set(3, 1920)
+    cam.set(4, 1080)
 
     cv2.namedWindow("test")
 
@@ -85,9 +87,12 @@ def run():
 
     while running == 1:
         try:
-            ret, frame = cam.read()
-            frame = imutils.resize(frame, width=500)
-            cv2.imshow("test", frame)
+
+            ret, framefull = cam.read()
+            #print(frame.shape)
+            cv2.imshow("test", framefull)
+
+            frame = imutils.resize(framefull, width=500)
 
             try:
                 if ser.inWaiting() > 0:
@@ -115,14 +120,16 @@ def run():
                             print('img saved')
                             ts = time.time()
                             st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d_%H-%M-%S')
-                            new_fn = current_emotion + '_' + st + '.jpg'
-                            copyfile(fn, 'ipad_server/' + new_fn)
+                            new_fn = st + '_' + current_emotion + '.jpg'
+                            copyfile(full_filename, 'ipad_server/' + new_fn)
 
                     previous_emotion = current_emotion
 
                 fn = 'temp_analysis.jpg'
+                full_filename = 'large.jpg'
                 #frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 cv2.imwrite(fn, frame)
+                cv2.imwrite(full_filename, framefull)
                 future_emotion = pool.submit(get_emotion, fn, stub)
 
         except KeyboardInterrupt:
