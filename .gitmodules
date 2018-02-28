@@ -1,0 +1,3 @@
+[submodule "app/imageServer"]
+	path = app/imageServer
+	url = git@github.com:ecal-mid/imageServer.git

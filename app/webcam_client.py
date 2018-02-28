@@ -18,6 +18,8 @@ import datetime
 import threading
 
 
+print('Starting webcam client')
+
 from concurrent.futures import ThreadPoolExecutor
 
 pool = ThreadPoolExecutor()
