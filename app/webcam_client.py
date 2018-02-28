@@ -87,14 +87,15 @@ def run():
             frame = imutils.resize(frame, width=500)
             cv2.imshow("test", frame)
 
-            if ser.inWaiting() > 0:
-                try:
+            try:
+                if ser.inWaiting() > 0:
                     line = ser.read(ser.inWaiting()).decode('ascii')
                     print(line, end='')
                     current_arduino_emotion = get_arduino_emotion(int(line))
                     print('current emotion {}'.format(current_arduino_emotion))
-                except Exception:
-                    current_emotion = 'error'
+            except Exception as e:
+                print(e)
+                current_emotion = 'error'
 
             if not ret:
                 break
