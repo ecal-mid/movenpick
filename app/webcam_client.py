@@ -19,7 +19,6 @@ import threading
 import signal
 
 
-
 print('Starting webcam client')
 
 from concurrent.futures import ThreadPoolExecutor
@@ -126,7 +125,7 @@ def run():
                             ts = time.time()
                             st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d_%H-%M-%S')
                             new_fn = st + '_' + current_emotion + '.jpg'
-                            copyfile(full_filename, 'ipad_server/' + new_fn)
+                            copyfile(full_filename, 'imageServer/movenpick/images/' + new_fn)
 
                     previous_emotion = current_emotion
 
