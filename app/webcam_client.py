@@ -16,6 +16,8 @@ import sys
 import time
 import datetime
 import threading
+import signal
+
 
 
 print('Starting webcam client')
@@ -61,6 +63,8 @@ ser = serial.Serial(serial_ports())
 
 current_arduino_emotion = 'sad'
 dict_arduino_emotion = {2: 'angry', 3: 'sad', 4: 'happy'}
+cam = None
+
 
 
 def get_arduino_emotion(n):
@@ -74,6 +78,7 @@ def run():
     global current_emotion
     global previous_emotion
     global current_arduino_emotion
+    global cam
 
     running = 1
     cam = cv2.VideoCapture(0)
@@ -140,6 +145,26 @@ def run():
     cam.release()
     cv2.destroyAllWindows()
 
+
+def handle_exit():
+    print("Kill signal detected, cleaning up ...")
+    global cam
+    global ser
+
+    cam.release()
+    ser.close()
+
+
+signal.signal(signal.SIGTERM, handle_exit)
+signal.signal(signal.SIGINT, handle_exit)
+
 if __name__ == "__main__":
-    print("hi")
-    run()
+    print("Starting webcam client ...")
+    try:
+        run()
+    except Exception as e:
+        print("STOPPING BECAUSE OF ERROR")
+        cam.release()
+        ser.close()
+        print(e)
+        exit()
